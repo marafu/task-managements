@@ -1,11 +1,17 @@
-export class Task {
-  constructor(
-    readonly title: string,
-    readonly description: string,
-    readonly status: string
-  ) {}
+import { Title } from "./Title";
 
-  create() {
-    if (this.title === "") throw new Error("The title cannot be empty");
+export class Task {
+  private title: Title;
+  private description: string;
+  private status: string;
+
+  private constructor(title: Title, description: string, status: string) {
+    this.title = title;
+    this.description = description;
+    this.status = status;
+  }
+
+  static create(title: string, description: string, status: string) {
+    return new Task(new Title(title), description, status);
   }
 }
