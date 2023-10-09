@@ -1,11 +1,15 @@
 export class Description {
   private value: string;
-  constructor(value: string) {
+  private limitLength = 1024;
+  constructor(value: string, limitLenght?: number) {
     this.value = value;
+    if (limitLenght) this.limitLength = limitLenght;
   }
 
   isValid(): boolean {
-    return this.value.length < 3 || this.value.length > 1024 ? false : true;
+    return this.value.length < 3 || this.value.length > this.limitLength
+      ? false
+      : true;
   }
 
   getValue() {
