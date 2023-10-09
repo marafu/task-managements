@@ -4,10 +4,14 @@
   "main": "index.js",
   "author": "Matheus Assis <matheusassissilva20@gmail.com>",
   "license": "MIT",
+  "scripts": {
+    "test": "jest"
+  },
   "devDependencies": {
     "@types/jest": "^29.5.5",
     "@types/node": "^20.8.4",
     "jest": "^29.7.0",
+    "ts-jest": "^29.1.1",
     "typescript": "^5.2.2"
   }
 }
