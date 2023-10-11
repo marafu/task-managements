@@ -1,6 +1,7 @@
 export class Description {
   private value: string;
   private limitLength = 1024;
+
   constructor(value: string, limitLenght?: number) {
     this.value = value;
     if (limitLenght) this.limitLength = limitLenght;
