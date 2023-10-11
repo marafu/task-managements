@@ -8,7 +8,6 @@ export class Title {
     if (this.value.length < 2 || this.value.length > 32) {
       return false;
     }
-
     return true;
   }
 
