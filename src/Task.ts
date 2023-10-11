@@ -1,4 +1,4 @@
-import { BusinessError, ChangeStatusError } from "./BusinessErrors";
+import { ChangeStatusError } from "./BusinessErrors";
 import { Description } from "./Description";
 import { Title } from "./Title";
 
