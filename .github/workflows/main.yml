@@ -6,9 +6,9 @@ name: CI
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -35,10 +35,9 @@ jobs:
       - name: Build and push Docker images
         uses: docker/build-push-action@v5.0.0
         with:
-          context: ./src
+          context: .
           file: ./Dockerfile
           push: true
           tags: |
             hefis/task-managements:1
             hefis/task-managements:latest
-            
