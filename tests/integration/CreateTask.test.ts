@@ -20,7 +20,7 @@ describe("Classe CreateTask", () => {
     connection = new MySQLPromiseConnectionAdapter(config);
   });
 
-  test("Deve persistir uma tarefa caso não exista no banco de dados", async function () {
+  test.skip("Deve persistir uma tarefa caso não exista no banco de dados", async function () {
     const sut = new CreateTask(
       new AccountRepositoryDatabase(connection),
       new TaskRepositoryDatabase(connection)

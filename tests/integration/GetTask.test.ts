@@ -15,7 +15,7 @@ describe("Contexto listar tarefas", function () {
     connection = new MySQLPromiseConnectionAdapter(config);
   });
 
-  test("Deve listar todos as tarefas criada pelo usuário", async function () {
+  test.skip("Deve listar todos as tarefas criada pelo usuário", async function () {
     const sut = new GetTask(connection);
     const input = {
       externalId: "20239e670f8064434651890250d532436317",

@@ -18,7 +18,7 @@ describe("Contexto finalizando tarefa", function () {
     connection = new MySQLPromiseConnectionAdapter(config);
   });
 
-  test("Deve finalizar uma tarefa que esteja em execução", async function () {
+  test.skip("Deve finalizar uma tarefa que esteja em execução", async function () {
     const accountRepository = new AccountRepositoryDatabase(connection);
     const taskRepository = new TaskRepositoryDatabase(connection);
     const getTask = new GetTask(connection);

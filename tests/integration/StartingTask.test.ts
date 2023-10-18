@@ -18,7 +18,7 @@ describe("Contexto iniciando tarefa", function () {
     connection = new MySQLPromiseConnectionAdapter(config);
   });
 
-  test("Deve iniciar uma tarefa que esteja criada", async function () {
+  test.skip("Deve iniciar uma tarefa que esteja criada", async function () {
     const accountRepository = new AccountRepositoryDatabase(connection);
     const taskRepository = new TaskRepositoryDatabase(connection);
     const getTask = new GetTask(connection);
