@@ -2,6 +2,7 @@ version: '3.3'
 services:
   db:
     image: mysql:5.7
+    container_name: db
     restart: always
     environment:
       MYSQL_DATABASE: 'db'
@@ -21,5 +22,26 @@ services:
     volumes:
       - my-db:/var/lib/mysql
 # Names our volume
+  app:
+    container_name: app
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    env_file: .env.local
+    ports:
+      - 4000:4000
+    depends_on:
+      - db
+
+  reverse:
+    container_name: reverse
+    hostname: reverse
+    image: nginx
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./nginx:/etc/nginx
+      - ./certs:/etc/ssl/private
 volumes:
   my-db:
