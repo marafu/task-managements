@@ -39,5 +39,5 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: |
-            hefis/task-managements:1
+            hefis/task-managements:${{github.run_number}}
             hefis/task-managements:latest
