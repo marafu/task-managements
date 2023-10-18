@@ -1,4 +1,5 @@
-import { BusinessError, ChangeStatusError } from "../src/BusinessErrors";
+import { BusinessError } from "../../src/domain/errors/BusinessErrors";
+import { UpdateStatusError } from "../../src/domain/errors/UpdateStatusError";
 
 describe("Classe BusinessErrors", () => {
   test("Deve ser criado o BusinessError", () => {
@@ -7,10 +8,10 @@ describe("Classe BusinessErrors", () => {
   });
 
   test("Deve ser criado o ChangeStatusError", () => {
-    const sut = new ChangeStatusError({
+    const sut = new UpdateStatusError({
       message: "error_message",
     });
-    expect(sut.name).toBe("CHANGE_STATUS_ERROR");
+    expect(sut.name).toBe("UPDATE_STATUS_ERROR");
     expect(sut.message).toBe("error_message");
   });
 });

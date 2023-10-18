@@ -1,8 +1,9 @@
-import { Description } from "../src/Description";
+import { Description } from "../../../src/domain/entities/task/Description";
 
 describe("Classe Description", () => {
   test("Deve criar uma descrição", () => {
     const description = new Description("Uma breve descrição");
+    expect(description.isValid()).toBeTruthy();
     expect(description.getValue()).toBe("Uma breve descrição");
   });
 

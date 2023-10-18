@@ -1,20 +1,28 @@
-import { ChangeStatusError } from "./BusinessErrors";
+import { UpdateStatusError } from "../../errors/UpdateStatusError";
 import { Description } from "./Description";
 import { Title } from "./Title";
 
 export class Task {
-  private title: Title;
-  private description: Description;
-  private status: string;
-
-  private constructor(title: Title, description: Description, status: string) {
-    this.title = title;
-    this.description = description;
-    this.status = status;
+  constructor(
+    private id: string,
+    private title: Title,
+    private description: Description,
+    private status: string,
+    private externalId: string,
+    private accountId: string
+  ) {
+    this.status = status ? status : "Todo";
   }
 
-  static create(title: string, description: string): Task {
-    return new Task(new Title(title), new Description(description), "Todo");
+  getId(): string {
+    return this.id;
+  }
+
+  getExternalId(): string {
+    return this.externalId;
+  }
+  getAccountId(): string {
+    return this.accountId;
   }
 
   getTitle(): string {
@@ -29,13 +37,13 @@ export class Task {
     return this.status;
   }
 
-  changeStatusInProgress() {
+  updateStatusInProgress() {
     if (this.status === "Cancelled")
-      throw new ChangeStatusError({
+      throw new UpdateStatusError({
         message: "Não foi possível alterar o status de uma tarefa cancelada",
       });
     if (this.status === "Done")
-      throw new ChangeStatusError({
+      throw new UpdateStatusError({
         message: "Não foi possível alterar o status de Done para In Progress",
       });
     if (this.status === "Todo") {
@@ -43,10 +51,14 @@ export class Task {
     }
   }
 
-  changeStatusDone() {
+  updateStatusDone() {
     if (this.status === "Cancelled")
-      throw new ChangeStatusError({
+      throw new UpdateStatusError({
         message: "Não foi possível alterar o status de uma tarefa cancelada",
+      });
+    if (this.status === "Todo")
+      throw new UpdateStatusError({
+        message: "A tarefa deve ser alterada para In Progress primeiro",
       });
     if (this.status === "In Progress") {
       this.status = "Done";

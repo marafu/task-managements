@@ -20,10 +20,12 @@ CREATE TABLE
 CREATE TABLE
     `task`(
         `id` VARCHAR(36) NOT NULL PRIMARY KEY,
-        `external_id` VARCHAR(36) NOT NULL UNIQUE,
+        `external_id` VARCHAR(64) NOT NULL UNIQUE,
+        `account_id` VARCHAR(36),
         `title` VARCHAR(32) NOT NULL,
         `description` TEXT NOT NULL,
         `status` VARCHAR(30) DEFAULT "Todo",
         `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        FOREIGN KEY (`account_id`) REFERENCES `account`(`id`)
     ) CHARACTER SET utf8 COLLATE utf8_general_ci;

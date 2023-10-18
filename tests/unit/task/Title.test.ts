@@ -1,8 +1,9 @@
-import { Title } from "../src/Title";
+import { Title } from "../../../src/domain/entities/task/Title";
 
 describe("Classe Title", () => {
   test("Deve criar um titulo", () => {
     const title = new Title("Titulo");
+    expect(title.isValid()).toBeTruthy();
     expect(title.getValue()).toBe("Titulo");
   });
 
