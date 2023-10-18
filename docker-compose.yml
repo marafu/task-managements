@@ -29,7 +29,7 @@ services:
       dockerfile: Dockerfile
     env_file: .env.local
     ports:
-      - 4000:4000
+      - 4002:4000
     depends_on:
       - db
 
@@ -38,7 +38,7 @@ services:
     hostname: reverse
     image: nginx
     ports:
-      - 80:80
+      - 81:80
       - 443:443
     volumes:
       - ./nginx:/etc/nginx
