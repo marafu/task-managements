@@ -4,7 +4,7 @@ COPY package.json .
 RUN yarn
 COPY tsconfig.json .
 RUN ls -la
-COPY ./src .
+COPY . .
 RUN yarn tsc -p ./src
 EXPOSE 4000
 CMD [ "node", "dist/src/main.js"]
