@@ -1,9 +1,9 @@
 FROM node:latest
 WORKDIR /home/node/app
 COPY package.json .
-COPY yarn.lock .
 RUN yarn
-COPY . .
-RUN yarn tsc -p .
+COPY tsconfig.json .
+COPY ./src .
+RUN yarn tsc -p ./src
 EXPOSE 4000
 CMD [ "node", "dist/src/main.js"]
