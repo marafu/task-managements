@@ -50,7 +50,10 @@ export class MainController {
         try {
           const [schema, token] = headers.authorization.split(" ");
           if (schema != "Token") throw new Error();
-          const jwtToken = jwt.decode(token) as TokenPayload;
+          const jwtToken = jwt.verify(
+            token,
+            process.env.JWT_SECRET || ""
+          ) as TokenPayload;
           const response = await this.getTask.execute(jwtToken.id);
           return {
             code: 200,

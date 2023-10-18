@@ -1,10 +1,8 @@
 FROM node:latest
-WORKDIR /home/node/app
+WORKDIR /usr/app
 COPY package.json .
+COPY tsconfig.json . 
+COPY . . 
 RUN yarn
-COPY tsconfig.json .
-RUN ls -la
-COPY . .
-RUN yarn tsc -p ./src
-EXPOSE 4000
-CMD [ "node", "dist/src/main.js"]
+RUN yarn tsc --project tsconfig.json
+CMD ["node", "./dist/src/main.js"]
