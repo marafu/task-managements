@@ -1,6 +1,7 @@
 import { Account } from "../../domain/entities/account/Account";
 import { SignupInput } from "../dtos/SignupInput";
 import { SignupOutput } from "../dtos/SignupOutput";
+import { AccountExistError } from "../errors/AccountExistError";
 import { AccountRepository } from "../repositories/AccountRepository";
 
 export class Signup {
@@ -10,7 +11,8 @@ export class Signup {
     const existingAccount = await this.accountRepository.getByEmail(
       input.email
     );
-    if (existingAccount) throw new Error("Account already exists");
+    if (existingAccount)
+      throw new AccountExistError({ message: "Account already exists" });
     const account = Account.create(input.name, input.email, input.password);
     await this.accountRepository.save(account);
     return {

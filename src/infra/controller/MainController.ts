@@ -1,28 +1,34 @@
 import jwt from "jsonwebtoken";
 import { Login } from "../../application/usecases/Login";
-import { Signup } from "../../application/usecases/Signup";
 import { CreateTask } from "../../application/usecases/CreateTask";
 import { HttpServer } from "../http/HttpServer";
 import { StartingTask } from "../../application/usecases/StartingTask";
 import { CompletingTask } from "../../application/usecases/CompletingTask";
 import { TokenPayload } from "../jwt/TokenPayload";
 import { ChangeStatusInput } from "../../application/dtos/ChangeStatusInput";
-import { GetTask } from "../../application/query/GetTask";
 import { CancellingTask } from "../../application/usecases/CancellingTask";
 import { ApplicationError } from "../../application/errors/ApplicationError";
 import { ChangeStatusError } from "../../application/errors/ChangeStatusError";
+import { SignupController } from "./SignupController";
+import { GetTaskController } from "./GetTaskController";
+import { CreateTaskController } from "./CreateTaskController";
+import { AccountNotExistError } from "../../application/errors/AccountNotExistError";
 
 export class MainController {
   constructor(
-    readonly signup: Signup,
+    readonly signupController: SignupController,
     readonly login: Login,
-    readonly createTask: CreateTask,
-    readonly getTask: GetTask,
+    readonly createTaskController: CreateTaskController,
+    readonly getTaskController: GetTaskController,
     readonly startingTask: StartingTask,
     readonly completingTask: CompletingTask,
     readonly cancellingTask: CancellingTask,
     readonly httpServer: HttpServer
   ) {
+    signupController.execute();
+    getTaskController.execute();
+    createTaskController.execute();
+
     this.httpServer.on(
       "get",
       "/hello",
@@ -36,94 +42,19 @@ export class MainController {
 
     this.httpServer.on(
       "post",
-      "/signup",
-      async (params: any, headers: any, body: any) => {
-        const response = await this.signup.execute(body);
-        return {
-          code: 200,
-          response,
-        };
-      }
-    );
-
-    this.httpServer.on(
-      "post",
       "/login",
       async (params: any, headers: any, body: any) => {
-        const response = await this.login.execute(body);
-        return {
-          code: 200,
-          response,
-        };
-      }
-    );
-
-    this.httpServer.on(
-      "get",
-      "/task",
-      async (params: any, headers: any, body: any) => {
         try {
-          const [schema, token] = headers.authorization.split(" ");
-          if (schema != "Token") throw new Error();
-          const jwtToken = jwt.verify(
-            token,
-            process.env.JWT_SECRET || "",
-            {}
-          ) as TokenPayload;
-          const response = await this.getTask.execute(jwtToken.id);
+          const response = await this.login.execute(body);
           return {
             code: 200,
             response,
           };
-        } catch (error) {
-          if (error instanceof jwt.JsonWebTokenError) {
-            throw new Error();
-          }
-          if (error instanceof jwt.TokenExpiredError) {
-            throw new Error();
-          }
-        }
-      }
-    );
-
-    this.httpServer.on(
-      "post",
-      "/task",
-      async (params: any, headers: any, body: any) => {
-        try {
-          const [schema, token] = headers.authorization.split(" ");
-          if (schema != "Token") throw new Error();
-          const jwtToken = jwt.decode(token) as TokenPayload;
-          const input = {
-            token: jwtToken.id,
-            title: body.title,
-            description: body.description,
-          };
-          const response = await this.createTask.execute(input);
-          return {
-            code: 201,
-            response,
-          };
-        } catch (error) {
-          if (error instanceof ApplicationError) {
+        } catch (error: any) {
+          console.log("Aqui");
+          if (error instanceof AccountNotExistError) {
             return {
-              code: 400,
-              response: {
-                message: error.message,
-              },
-            };
-          }
-          if (error instanceof jwt.JsonWebTokenError) {
-            return {
-              code: 401,
-              response: {
-                message: error.message,
-              },
-            };
-          }
-          if (error instanceof jwt.TokenExpiredError) {
-            return {
-              code: 401,
+              code: 403,
               response: {
                 message: error.message,
               },
@@ -192,6 +123,7 @@ export class MainController {
         }
       }
     );
+
     this.httpServer.on(
       "post",
       "/task/cancel",

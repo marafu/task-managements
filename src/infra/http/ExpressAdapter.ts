@@ -2,8 +2,7 @@ import express, { Request, Response, Router } from "express";
 import cors from "cors";
 import helmet from "helmet";
 import { HttpServer } from "./HttpServer";
-import { ChangeStatusError } from "../../application/errors/ChangeStatusError";
-import { ApplicationError } from "../../application/errors/ApplicationError";
+import BodyParserErrorHandler from "express-body-parser-error-handler";
 
 interface CallbackResponse {
   code: number;
@@ -16,7 +15,8 @@ export class ExpressAdapter implements HttpServer {
     this.app = express();
     this.app.use(express.json());
     this.app.use(cors());
-    this.app.use(helmet({ xXssProtection: true }));
+    this.app.use(helmet());
+    this.app.use(BodyParserErrorHandler());
   }
 
   on(method: string, url: string, callback: Function): void {

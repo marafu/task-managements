@@ -11,6 +11,9 @@ import { GetTask } from "./application/query/GetTask";
 import { StartingTask } from "./application/usecases/StartingTask";
 import { CompletingTask } from "./application/usecases/CompletingTask";
 import { CancellingTask } from "./application/usecases/CancellingTask";
+import { SignupController } from "./infra/controller/SignupController";
+import { CreateTaskController } from "./infra/controller/CreateTaskController";
+import { GetTaskController } from "./infra/controller/GetTaskController";
 
 const config = {
   host: process.env.MYSQL_SERVICE_HOST || "",
@@ -22,6 +25,7 @@ const config = {
 const connection = new MySQLPromiseConnectionAdapter(config);
 const accountRepository = new AccountRepositoryDatabase(connection);
 const taskRepository = new TaskRepositoryDatabase(connection);
+const httpServer = new ExpressAdapter();
 const signup = new Signup(accountRepository);
 const login = new Login(accountRepository);
 const getTask = new GetTask(connection);
@@ -41,12 +45,26 @@ const cancellingTask = new CancellingTask(
   getTask
 );
 const createTask = new CreateTask(accountRepository, taskRepository);
-const httpServer = new ExpressAdapter();
-new MainController(
+const signupController = new SignupController(
+  accountRepository,
   signup,
-  login,
+  httpServer
+);
+const createTaskController = new CreateTaskController(
+  taskRepository,
   createTask,
+  httpServer
+);
+const getTaskController = new GetTaskController(
+  taskRepository,
   getTask,
+  httpServer
+);
+new MainController(
+  signupController,
+  login,
+  createTaskController,
+  getTaskController,
   startingTask,
   completingTask,
   cancellingTask,
