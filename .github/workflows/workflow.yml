@@ -1,8 +1,10 @@
 name: workflow
 
 on:
+  push:
+    branches: ["develop"]
   pull_request:
-    branches: ["main"]
+    branches: ["main", "develop"]
 
 jobs:
   BUILD:
