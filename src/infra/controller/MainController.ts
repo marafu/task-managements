@@ -24,10 +24,25 @@ export class MainController {
     readonly httpServer: HttpServer
   ) {
     this.httpServer.on(
+      "get",
+      "/hello",
+      async (params: any, headers: any, body: any) => {
+        return {
+          code: 200,
+          response: "Server on",
+        };
+      }
+    );
+
+    this.httpServer.on(
       "post",
       "/signup",
       async (params: any, headers: any, body: any) => {
-        return await this.signup.execute(body);
+        const response = await this.signup.execute(body);
+        return {
+          code: 200,
+          response,
+        };
       }
     );
 
@@ -52,7 +67,8 @@ export class MainController {
           if (schema != "Token") throw new Error();
           const jwtToken = jwt.verify(
             token,
-            process.env.JWT_SECRET || ""
+            process.env.JWT_SECRET || "",
+            {}
           ) as TokenPayload;
           const response = await this.getTask.execute(jwtToken.id);
           return {
