@@ -1,10 +1,8 @@
 name: workflow
 
 on:
-  push:
-    branches: ["develop"]
   pull_request:
-    branches: ["main", "develop"]
+    branches: ["main"]
 
 jobs:
   BUILD:
@@ -49,7 +47,7 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: |
-            hefis/task-managements:${{github.run_number}}
+            hefis/task-managements:1.${{github.run_number}}
             hefis/task-managements:latest
 
   CD:
