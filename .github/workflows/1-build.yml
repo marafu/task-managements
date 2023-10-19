@@ -33,3 +33,7 @@ jobs:
       - name: Install Dependencies
         run: |
           yarn
+
+      - name: Run tests without coverage
+        run: |
+          yarn test
