@@ -7,10 +7,11 @@ let connection: DatabaseConnection;
 describe("Contexto listar tarefas", function () {
   beforeAll(function () {
     const config = {
-      host: process.env.MYSQL_HOST || "172.21.140.84",
-      user: process.env.MYSQL_USER || "user",
-      password: process.env.MYSQL_PASSWORD || "password",
-      database: process.env.MYSQL_DATABASE || "db",
+      host: process.env.MYSQL_SERVICE_HOST || "",
+      port: Number(process.env.MYSQL_SERVICE_PORT) || 3306,
+      user: process.env.MYSQL_USER || "",
+      password: process.env.MYSQL_PASSWORD || "",
+      database: process.env.MYSQL_DATABASE || "",
     };
     connection = new MySQLPromiseConnectionAdapter(config);
   });

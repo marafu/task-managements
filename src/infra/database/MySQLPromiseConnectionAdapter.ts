@@ -5,15 +5,17 @@ import { DatabaseConnection } from "./DatabaseConnection";
 
 interface MySQLProps {
   host: string;
+  port: number;
   user: string;
   password: string;
   database: string;
 }
 export class MySQLPromiseConnectionAdapter implements DatabaseConnection {
   private connection: MySQLConnection;
-  constructor({ host, user, password, database }: MySQLProps) {
+  constructor({ host, port, user, password, database }: MySQLProps) {
     this.connection = mysql.createPool({
       host,
+      port,
       user,
       password,
       database,

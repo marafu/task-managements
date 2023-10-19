@@ -77,7 +77,7 @@ kind: Deployment
 metadata:
   name: web
 spec:
-  replicas: 1
+  replicas: 10
   selector:
     matchLabels:
       app: web
@@ -88,9 +88,9 @@ spec:
     spec:
       containers:
         - name: web
-          image: hefis/task-managements:latest
+          image: hefis/task-managements:1.4
           ports:
-            - containerPort: 4000
+            - containerPort: 3000
           env:
             - name: MYSQL_DATABASE
               value: "db"
@@ -110,5 +110,5 @@ spec:
     app: web
   ports:
     - port: 8080
-      targetPort: 4000
+      targetPort: 3000
   type: LoadBalancer
