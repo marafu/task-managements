@@ -20,27 +20,27 @@
 
 #### Ameaças
 
-Exposição de Informações Sensíveis: Se o processo de registro não for seguro, informações sensíveis, como senhas, podem ser expostas.
+**Exposição de Informações Sensíveis**: Se o processo de registro não for seguro, informações sensíveis, como senhas, podem ser expostas.
 
-Brute Force Attack: Atacantes podem tentar criar múltiplas contas de forma automatizada, possivelmente para usar em ataques posteriores.
+**Brute Force Attack**: Atacantes podem tentar criar múltiplas contas de forma automatizada, possivelmente para usar em ataques posteriores.
 
-Injeção: Se os dados inseridos durante o registro não forem validados, um atacante pode tentar inserir código malicioso.
+**Injeção**: Se os dados inseridos durante o registro não forem validados, um atacante pode tentar inserir código malicioso.
 
 #### Recomendações
 
 - [ ] **Limitação de Taxa (Rate Limiting)**: Estabeleça um número máximo de solicitações permitidas por IP ou token de autenticação em um determinado período de tempo.
 
-- [ ] **Políticas de Senha Forte**: Exija combinações de letras maiúsculas e minúsculas, números e caracteres especiais para senhas. Defina um comprimento mínimo para senhas.
+- [x] **Políticas de Senha Forte**: Exija combinações de letras maiúsculas e minúsculas, números e caracteres especiais para senhas. Defina um comprimento mínimo para senhas.
 
-- [ ] Janelas de Retentativa: Após um certo número de tentativas de login falhadas, force um atraso antes que a próxima tentativa possa ser feita.
+- [ ] **Janelas de Retentativa**: Após um certo número de tentativas de login falhadas, force um atraso antes que a próxima tentativa possa ser feita.
 
-- [ ] Confirmação de E-mail: Exija a verificação do endereço de e-mail fornecido pelo usuário enviando um link ou código de verificação. Esse passo garante que o e-mail está sob controle do usuário e ajuda a prevenir registros e alterações fraudulentas no perfil.
+- [ ] **Confirmação de E-mail**: Exija a verificação do endereço de e-mail fornecido pelo usuário enviando um link ou código de verificação. Esse passo garante que o e-mail está sob controle do usuário e ajuda a prevenir registros e alterações fraudulentas no perfil.
 
 ### 2. Login do usuário:
 
 #### Ameaças
 
-Injeção: Se os dados inseridos durante o registro não forem validados, um atacante pode tentar inserir código malicioso.
+**Injeção**: Se os dados inseridos durante o registro não forem validados, um atacante pode tentar inserir código malicioso.
 
 #### Recomendações
 

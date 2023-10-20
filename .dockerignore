@@ -12,5 +12,3 @@ docs
 .github
 .gitignore
 Dockerfile
-src
-tests

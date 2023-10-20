@@ -1,6 +1,7 @@
 import { AccountExistError } from "../../application/errors/AccountExistError";
 import { AccountRepository } from "../../application/repositories/AccountRepository";
 import { Signup } from "../../application/usecases/Signup";
+import { DomainError } from "../../domain/errors/DomainErrors";
 import { HttpServer } from "../http/HttpServer";
 
 export class SignupController {
@@ -19,7 +20,7 @@ export class SignupController {
           return {
             code: 200,
             response: {
-              id: response.accountId,
+              id: response.message,
             },
           };
         } catch (error: any) {
@@ -28,6 +29,13 @@ export class SignupController {
               code: 400,
               response: { message: error.message },
             };
+
+          if (error instanceof DomainError) {
+            return {
+              code: 400,
+              response: { message: error.message },
+            };
+          }
         }
       }
     );

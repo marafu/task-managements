@@ -3,4 +3,3 @@ dist
 coverage
 .env.*
 secrets/
-docker-compose.yml

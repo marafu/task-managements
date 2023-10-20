@@ -3,7 +3,8 @@ import cors from "cors";
 import helmet from "helmet";
 import { HttpServer } from "./HttpServer";
 import BodyParserErrorHandler from "express-body-parser-error-handler";
-
+import swaggerUi from "swagger-ui-express";
+import swaggerDocs from "../../swagger.json";
 interface CallbackResponse {
   code: number;
   response: any;
@@ -17,6 +18,7 @@ export class ExpressAdapter implements HttpServer {
     this.app.use(cors());
     this.app.use(helmet());
     this.app.use(BodyParserErrorHandler());
+    this.app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
   }
 
   on(method: string, url: string, callback: Function): void {

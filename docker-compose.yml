@@ -4,21 +4,21 @@ services:
     image: mysql:5.7
     container_name: db
     restart: always
-    env_file: .env.local
+    env_file: .env
     ports:
       - '3306:3306'
     expose:
       - '3306'
     volumes:
       - my-db:/var/lib/mysql
-  app:
-    container_name: app
-    image: hefis/task-managements:test.1.7
-    env_file: .env.local
-    restart: always
-    ports:
-      - 4000:4000
-    depends_on:
-      - db
+  # app:
+  #   container_name: app
+  #   build: .
+  #   env_file: .env
+  #   restart: always
+  #   ports:
+  #     - 4000:4000
+  #   depends_on:
+  #     - db
 volumes:
   my-db:

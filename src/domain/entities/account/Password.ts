@@ -11,20 +11,31 @@ export interface Password {
 
 export class PBKDF2Password implements Password {
   algorithm: string;
-  private regexValidation =
-    "^(?=.*[a-z])(?=.*[A-Z])(?=.*d)(?=.*[@$!%*?&#])[A-Za-zd@$!%*?&#]{8,}";
 
   private constructor(
     readonly value: string,
     readonly salt: string,
-    readonly minLength?: number,
     readonly maxLength?: number
   ) {
     this.algorithm = "pbkdf2";
-    if (!minLength) this.minLength = 8;
   }
 
-  static create(password: string) {
+  static create(password: string, maxLength?: number) {
+    if (
+      password.length < 8 &&
+      !password.match(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*d)(?=.*[@$!%*?&#])[A-Za-zd@$!%*?&#]{8,}/
+      )
+    )
+      throw new PasswordInsecureError({
+        message: `Could not signup your account. The password is lower 8 characters`,
+      });
+
+    if (maxLength)
+      if (password.length > maxLength)
+        throw new PasswordLimitExceedError({
+          message: "You exceed password limit length. The P",
+        });
     const salt = crypto.randomBytes(20).toString("hex");
     const value = crypto
       .pbkdf2Sync(password, salt, 100, 64, "sha512")
@@ -44,13 +55,7 @@ export class PBKDF2Password implements Password {
     return this.value === value;
   }
 
-  private policyValidatePassword(password: string) {
-    if (this.maxLength)
-      if (password.length > this.maxLength)
-        throw new PasswordLimitExceedError();
-    if (!password.match(this.regexValidation))
-      throw new PasswordInsecureError();
-  }
+  policyValidatePassword(password: string) {}
 }
 
 export class PasswordFactory {
