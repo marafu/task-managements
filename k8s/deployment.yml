@@ -1,44 +1,4 @@
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: mysql
-spec:
-  selector:
-    matchLabels:
-      app: mysql
-  strategy:
-    type: Recreate
-  template:
-    metadata:
-      labels:
-        app: mysql
-    spec:
-      containers:
-        - image: mysql
-          name: mysql
-          envFrom:
-            - secretRef:
-                name: mysql-secret
-          ports:
-            - containerPort: 3306
-              name: mysql
-          volumeMounts:
-            - name: mysql-persistent-storage
-              mountPath: /var/lib/mysql
-      volumes:
-        - name: mysql-persistent-storage
-          persistentVolumeClaim:
-            claimName: mysql-pv-claim
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: mysql
-spec:
-  ports:
-    - port: 3306
-  selector:
-    app: mysql
+# MySQL Storage
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -67,6 +27,50 @@ spec:
     requests:
       storage: 1Gi
 ---
+# MySQL Deployment
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+spec:
+  ports:
+    - port: 3306
+  selector:
+    app: mysql
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+spec:
+  selector:
+    matchLabels:
+      app: mysql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+        - image: mysql:5.7
+          name: mysql
+          envFrom:
+            - secretRef:
+                name: mysql-secret
+          ports:
+            - containerPort: 3306
+              name: mysql
+          volumeMounts:
+            - name: mysql-persistent-storage
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: mysql-persistent-storage
+          persistentVolumeClaim:
+            claimName: mysql-pv-claim
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -83,15 +87,30 @@ spec:
     spec:
       containers:
         - name: web
-          image: hefis/task-managements:test.1.0
+          image: hefis/task-managements:test.1.6
           ports:
             - containerPort: 4000
+          env:
+            - name: DATABASE_USER
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: MYSQL_USER
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: MYSQL_PASSWORD
+            - name: DATABASE_HOST
+              value: $(MYSQL_SERVICE_HOST)
+            - name: DATABASE_PORT
+              value: $(MYSQL_SERVICE_PORT)
           envFrom:
             - secretRef:
                 name: api-secret
-          env:
-            - name: "PORT"
-              value: "4000"
+            - configMapRef:
+                name: api-configmap
+
 ---
 apiVersion: v1
 kind: Service

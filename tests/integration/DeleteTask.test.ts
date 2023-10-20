@@ -1,21 +1,19 @@
 import jwt from "jsonwebtoken";
 import { TaskRepositoryDatabase } from "../../src/infra/repositories/TaskRepositoryDatabase";
 import { MySQLPromiseConnectionAdapter } from "../../src/infra/database/MySQLPromiseConnectionAdapter";
-import { DeleteTaskInput } from "../../src/application/dtos/DeleteTaskInput";
 import { DeleteTask } from "../../src/application/usecases/DeleteTask";
 import { DatabaseConnection } from "../../src/infra/database/DatabaseConnection";
 import { AccountRepositoryDatabase } from "../../src/infra/repositories/AccountRepositoryDatabase";
-import { TokenPayload } from "../../src/infra/jwt/TokenPayload";
 
 let connection: DatabaseConnection;
 
 beforeEach(function () {
   const config = {
-    host: process.env.MYSQL_SERVICE_HOST || "",
-    port: Number(process.env.MYSQL_SERVICE_PORT) || 3306,
-    user: process.env.MYSQL_USER || "",
-    password: process.env.MYSQL_PASSWORD || "",
-    database: process.env.MYSQL_DATABASE || "",
+    host: process.env.DATABASE_HOST || "",
+    port: Number(process.env.DATABASE_PORT) || 3306,
+    user: process.env.DATABASE_USER || "",
+    password: process.env.DATABASE_PASSWORD || "",
+    database: process.env.DATABASE_DATABASE || "",
   };
   connection = new MySQLPromiseConnectionAdapter(config);
 });

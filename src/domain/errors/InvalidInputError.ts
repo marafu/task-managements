@@ -1,6 +1,6 @@
-import { BusinessError } from "./BusinessErrors";
+import { DomainError } from "./DomainErrors";
 
-export class InvalidInputError extends BusinessError {
+export class InvalidInputError extends DomainError {
   name: string;
   message: string;
   stack?: string | undefined;
