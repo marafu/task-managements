@@ -13,25 +13,12 @@ services:
       - my-db:/var/lib/mysql
   app:
     container_name: app
-    build: 
-      context: .
-      dockerfile: Dockerfile
+    image: hefis/task-managements:test.1.6
     env_file: .env
     restart: always
     ports:
       - 4000:4000
     depends_on:
       - db
-
-  reverse:
-    container_name: reverse
-    hostname: reverse
-    image: nginx
-    ports:
-      - 81:80
-      - 443:443
-    volumes:
-      - ./nginx:/etc/nginx
-      - ./certs:/etc/ssl/private
 volumes:
   my-db:

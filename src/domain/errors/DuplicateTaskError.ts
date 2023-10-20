@@ -1,6 +1,6 @@
-import { BusinessError } from "./BusinessErrors";
+import { DomainError } from "./DomainErrors";
 
-export class DuplicateTaskError extends BusinessError {
+export class DuplicateTaskError extends DomainError {
   name: string;
   message: string;
   stack?: string | undefined;

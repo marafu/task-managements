@@ -16,11 +16,11 @@ import { CreateTaskController } from "./infra/controller/CreateTaskController";
 import { GetTaskController } from "./infra/controller/GetTaskController";
 
 const config = {
-  host: process.env.MYSQL_SERVICE_HOST || "",
-  port: Number(process.env.MYSQL_SERVICE_PORT) || 3306,
-  user: process.env.MYSQL_USER || "",
-  password: process.env.MYSQL_PASSWORD || "",
-  database: process.env.MYSQL_DATABASE || "",
+  host: process.env.DATABASE_HOST || "",
+  port: Number(process.env.DATABASE_PORT) || 3306,
+  user: process.env.DATABASE_USER || "",
+  password: process.env.DATABASE_PASSWORD || "",
+  database: process.env.DATABASE_DATABASE || "",
 };
 const connection = new MySQLPromiseConnectionAdapter(config);
 const accountRepository = new AccountRepositoryDatabase(connection);

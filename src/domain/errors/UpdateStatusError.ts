@@ -1,6 +1,6 @@
-import { BusinessError } from "./BusinessErrors";
+import { DomainError } from "./DomainErrors";
 
-export class UpdateStatusError extends BusinessError {
+export class UpdateStatusError extends DomainError {
   name: string;
   message: string;
   stack?: string | undefined;
