@@ -1,9 +1,7 @@
 export class Description {
-  private value: string;
   private limitLength = 1024;
 
-  constructor(value: string, limitLenght?: number) {
-    this.value = value;
+  constructor(readonly value: string, limitLenght?: number) {
     if (limitLenght) this.limitLength = limitLenght;
   }
 
@@ -11,9 +9,5 @@ export class Description {
     return this.value.length < 3 || this.value.length > this.limitLength
       ? false
       : true;
-  }
-
-  getValue() {
-    return this.value;
   }
 }

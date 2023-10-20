@@ -23,9 +23,9 @@ jobs:
         run: |
           yarn
 
-      - name: Run tests without coverage
+      - name: Run Unitary Tests
         run: |
-          yarn test
+          yarn test:unit
 
   CI:
     runs-on: ubuntu-latest
@@ -47,7 +47,7 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: |
-            hefis/task-managements:1.${{github.run_number}}
+            hefis/task-managements:1.${{github.run_id}}
             hefis/task-managements:latest
 
   CD:
@@ -61,3 +61,10 @@ jobs:
         uses: Azure/k8s-set-context@v3.0
         with:
           kubeconfig: ${{secrets.K8S_KUBECONFIG}}
+
+      - name: Deploy to Kubernetes cluster
+        uses: Azure/k8s-deploy@v4.9
+        with:
+          images: hefis/task-managements:1.${{github.run_id}}
+          manifest: |
+            k8s/deployment.yml

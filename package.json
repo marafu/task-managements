@@ -5,7 +5,7 @@
   "author": "Matheus Assis <matheusassissilva20@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "test": "jest",
+    "test:unit": "jest tests/unit",
     "build": "tsc -p ."
   },
   "devDependencies": {

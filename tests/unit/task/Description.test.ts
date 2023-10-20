@@ -4,7 +4,7 @@ describe("Classe Description", () => {
   test("Deve criar uma descrição", () => {
     const description = new Description("Uma breve descrição");
     expect(description.isValid()).toBeTruthy();
-    expect(description.getValue()).toBe("Uma breve descrição");
+    expect(description.value).toBe("Uma breve descrição");
   });
 
   test("Não deve criar uma descrição seja menor que 2 caracteres", () => {

@@ -2,12 +2,11 @@ import jwt from "jsonwebtoken";
 import { Login } from "../../application/usecases/Login";
 import { CreateTask } from "../../application/usecases/CreateTask";
 import { HttpServer } from "../http/HttpServer";
-import { StartingTask } from "../../application/usecases/StartingTask";
-import { CompletingTask } from "../../application/usecases/CompletingTask";
+import { StartTask } from "../../application/usecases/StartTask";
+import { CompleteTask } from "../../application/usecases/CompleteTask";
 import { TokenPayload } from "../jwt/TokenPayload";
-import { ChangeStatusInput } from "../../application/dtos/ChangeStatusInput";
-import { CancellingTask } from "../../application/usecases/CancellingTask";
-import { ApplicationError } from "../../application/errors/ApplicationError";
+import { UpdateTaskInput } from "../../application/dtos/UpdateTaskInput";
+import { CancelTask } from "../../application/usecases/CancelTask";
 import { ChangeStatusError } from "../../application/errors/ChangeStatusError";
 import { SignupController } from "./SignupController";
 import { GetTaskController } from "./GetTaskController";
@@ -20,9 +19,9 @@ export class MainController {
     readonly login: Login,
     readonly createTaskController: CreateTaskController,
     readonly getTaskController: GetTaskController,
-    readonly startingTask: StartingTask,
-    readonly completingTask: CompletingTask,
-    readonly cancellingTask: CancellingTask,
+    readonly startTask: StartTask,
+    readonly completeTask: CompleteTask,
+    readonly cancelTask: CancelTask,
     readonly httpServer: HttpServer
   ) {
     signupController.execute();
@@ -72,8 +71,8 @@ export class MainController {
           const [schema, token] = headers.authorization.split(" ");
           if (schema != "Token") throw new Error();
           const jwtToken = jwt.decode(token) as TokenPayload;
-          const input = new ChangeStatusInput(jwtToken.id, body.taskId);
-          const response = await this.startingTask.execute(input);
+          const input = new UpdateTaskInput(jwtToken.id, body.taskId);
+          const response = await this.startTask.execute(input);
           return {
             code: 201,
             response,
@@ -102,8 +101,8 @@ export class MainController {
           const [schema, token] = headers.authorization.split(" ");
           if (schema != "Token") throw new Error();
           const jwtToken = jwt.decode(token) as TokenPayload;
-          const input = new ChangeStatusInput(jwtToken.id, body.taskId);
-          const response = await this.completingTask.execute(input);
+          const input = new UpdateTaskInput(jwtToken.id, body.taskId);
+          const response = await this.completeTask.execute(input);
           return {
             code: 201,
             response,
@@ -132,8 +131,8 @@ export class MainController {
           const [schema, token] = headers.authorization.split(" ");
           if (schema != "Token") throw new Error();
           const jwtToken = jwt.decode(token) as TokenPayload;
-          const input = new ChangeStatusInput(jwtToken.id, body.taskId);
-          const response = await this.cancellingTask.execute(input);
+          const input = new UpdateTaskInput(jwtToken.id, body.taskId);
+          const response = await this.cancelTask.execute(input);
           return {
             code: 200,
             response,

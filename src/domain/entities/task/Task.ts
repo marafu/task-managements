@@ -5,8 +5,8 @@ import { Title } from "./Title";
 export class Task {
   constructor(
     private id: string,
-    private title: Title,
-    private description: Description,
+    readonly title: Title,
+    readonly description: Description,
     private status: string,
     private externalId: string,
     private accountId: string
@@ -23,14 +23,6 @@ export class Task {
   }
   getAccountId(): string {
     return this.accountId;
-  }
-
-  getTitle(): string {
-    return this.title.getValue();
-  }
-
-  getDescription(): string {
-    return this.description.getValue();
   }
 
   getStatus(): string {

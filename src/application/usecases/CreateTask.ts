@@ -6,7 +6,6 @@ import { randomUUID } from "crypto";
 import { CreateTaskInput } from "../dtos/CreateTaskInput";
 import { CreateTaskOutput } from "../dtos/CreateTaskOutput";
 import { AccountRepository } from "../repositories/AccountRepository";
-import { TokenPayload } from "../../infra/jwt/TokenPayload";
 import { CreateTaskError } from "../errors/CreateTaskError";
 
 export class CreateTask {
@@ -17,7 +16,8 @@ export class CreateTask {
 
   async execute(input: CreateTaskInput): Promise<CreateTaskOutput> {
     const account = await this.accountRepository.getByExternalId(input.token);
-    if (!account) throw new CreateTaskError({ message: "User not found" });
+    if (!account)
+      throw new CreateTaskError({ message: "Could not create your task" });
     const task = new Task(
       randomUUID(),
       new Title(input.title),
@@ -30,8 +30,8 @@ export class CreateTask {
     await this.taskRepository.save(task);
     return new CreateTaskOutput(
       task.getExternalId(),
-      task.getTitle(),
-      task.getDescription(),
+      task.title,
+      task.description,
       task.getStatus()
     );
   }

@@ -1,8 +1,8 @@
 import jwt from "jsonwebtoken";
-import { CreateTask } from "../../src/application/usecases/CreateTask";
 import { TaskRepositoryDatabase } from "../../src/infra/repositories/TaskRepositoryDatabase";
 import { MySQLPromiseConnectionAdapter } from "../../src/infra/database/MySQLPromiseConnectionAdapter";
-import { CreateTaskInput } from "../../src/application/dtos/CreateTaskInput";
+import { DeleteTaskInput } from "../../src/application/dtos/DeleteTaskInput";
+import { DeleteTask } from "../../src/application/usecases/DeleteTask";
 import { DatabaseConnection } from "../../src/infra/database/DatabaseConnection";
 import { AccountRepositoryDatabase } from "../../src/infra/repositories/AccountRepositoryDatabase";
 import { TokenPayload } from "../../src/infra/jwt/TokenPayload";
@@ -20,18 +20,25 @@ beforeEach(function () {
   connection = new MySQLPromiseConnectionAdapter(config);
 });
 
-test("Deve persistir uma tarefa caso não exista no banco de dados", async function () {
-  const sut = new CreateTask(
+test("Deve excluir uma tarefa", async function () {
+  const sut = new DeleteTask(
     new AccountRepositoryDatabase(connection),
     new TaskRepositoryDatabase(connection)
   );
-  const taskInput = new CreateTaskInput(
-    "202359ce12eb3f194de88016cd992ccb9112",
-    `title ${new Date().toISOString()}`,
-    "description 2"
+  const [data] = await connection.query(
+    'SELECT external_id, title, account_id, status FROM task WHERE status = "In Progress"',
+    []
   );
-  const result = await sut.execute(taskInput);
-  expect(result.id).toBeTruthy();
+  const [user] = await connection.query(
+    "SELECT external_id FROM account WHERE id = ?",
+    [data[0].account_id]
+  );
+  const input = {
+    token: user[0].external_id,
+    taskId: data[0].external_id,
+  };
+  const result = await sut.execute(input);
+  expect(result.message).toBe(`Task ${data[0].title} deleted successfully`);
 });
 
 afterEach(async function () {

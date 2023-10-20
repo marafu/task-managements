@@ -19,8 +19,8 @@ beforeEach(() => {
 describe("Classe Task", () => {
   test("Deve criar uma tarefa", function () {
     expect(task.getId()).toBe("");
-    expect(task.getTitle()).toBe("Tarefa 1");
-    expect(task.getDescription()).toBe("Descrição da tarefa 1");
+    expect(task.title.value).toBe("Tarefa 1");
+    expect(task.description.value).toBe("Descrição da tarefa 1");
     expect(task).toBeTruthy();
   });
 

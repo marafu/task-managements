@@ -6,5 +6,5 @@ export interface TaskRepository {
   getByTitle(title: string): Promise<Task | undefined>;
   save(task: Task): Promise<void>;
   updateStatus(id: string, task: Task): Promise<Task>;
-  deleteByTitle(title: string): Promise<void>;
+  delete(task: Task): Promise<void>;
 }
