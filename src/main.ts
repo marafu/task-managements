@@ -8,9 +8,9 @@ import { TaskRepositoryDatabase } from "./infra/repositories/TaskRepositoryDatab
 import { MainController } from "./infra/controller/MainController";
 import { CreateTask } from "./application/usecases/CreateTask";
 import { GetTask } from "./application/query/GetTask";
-import { StartingTask } from "./application/usecases/StartingTask";
-import { CompletingTask } from "./application/usecases/CompletingTask";
-import { CancellingTask } from "./application/usecases/CancellingTask";
+import { StartTask } from "./application/usecases/StartTask";
+import { CompleteTask } from "./application/usecases/CompleteTask";
+import { CancelTask } from "./application/usecases/CancelTask";
 import { SignupController } from "./infra/controller/SignupController";
 import { CreateTaskController } from "./infra/controller/CreateTaskController";
 import { GetTaskController } from "./infra/controller/GetTaskController";
@@ -29,21 +29,9 @@ const httpServer = new ExpressAdapter();
 const signup = new Signup(accountRepository);
 const login = new Login(accountRepository);
 const getTask = new GetTask(connection);
-const startingTask = new StartingTask(
-  accountRepository,
-  taskRepository,
-  getTask
-);
-const completingTask = new CompletingTask(
-  accountRepository,
-  taskRepository,
-  getTask
-);
-const cancellingTask = new CancellingTask(
-  accountRepository,
-  taskRepository,
-  getTask
-);
+const startTask = new StartTask(accountRepository, taskRepository);
+const completeTask = new CompleteTask(accountRepository, taskRepository);
+const cancelTask = new CancelTask(accountRepository, taskRepository);
 const createTask = new CreateTask(accountRepository, taskRepository);
 const signupController = new SignupController(
   accountRepository,
@@ -65,9 +53,9 @@ new MainController(
   login,
   createTaskController,
   getTaskController,
-  startingTask,
-  completingTask,
-  cancellingTask,
+  startTask,
+  completeTask,
+  cancelTask,
   httpServer
 );
 httpServer.listen(Number(process.env.PORT) || 3000);

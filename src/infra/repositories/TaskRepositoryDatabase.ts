@@ -2,7 +2,6 @@ import { TaskRepository } from "../../application/repositories/TaskRepository";
 import { Task } from "../../domain/entities/task/Task";
 import { DatabaseConnection } from "../database/DatabaseConnection";
 import { EntityNotFound } from "../errors/EntityNotFoundError";
-import { RepositoryError } from "../errors/RepositoryError";
 
 export class TaskRepositoryDatabase implements TaskRepository {
   constructor(private connection: DatabaseConnection) {}
@@ -60,8 +59,8 @@ export class TaskRepositoryDatabase implements TaskRepository {
       [
         task.getId(),
         task.getExternalId(),
-        task.getTitle(),
-        task.getDescription(),
+        task.title.value,
+        task.description.value,
         task.getStatus(),
         task.getAccountId(),
       ]
@@ -77,7 +76,9 @@ export class TaskRepositoryDatabase implements TaskRepository {
     return taskExists;
   }
 
-  async deleteByTitle(title: string): Promise<void> {
-    await this.connection.query("DELETE FROM task WHERE title = ?", [title]);
+  async delete(task: Task): Promise<void> {
+    await this.connection.query("DELETE FROM task WHERE id = ?", [
+      task.getId(),
+    ]);
   }
 }

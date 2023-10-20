@@ -4,7 +4,7 @@ describe("Classe Title", () => {
   test("Deve criar um titulo", () => {
     const title = new Title("Titulo");
     expect(title.isValid()).toBeTruthy();
-    expect(title.getValue()).toBe("Titulo");
+    expect(title.value).toBe("Titulo");
   });
 
   test("Não deve criar um titulo vazio", function () {

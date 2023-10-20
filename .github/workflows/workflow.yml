@@ -23,9 +23,9 @@ jobs:
         run: |
           yarn
 
-      - name: Run tests without coverage
+      - name: Run Unitary Tests
         run: |
-          yarn test
+          yarn test:unit
 
   CI:
     runs-on: ubuntu-latest
