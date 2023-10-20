@@ -35,9 +35,9 @@ jobs:
         uses: actions/checkout@v3
       - name: Build Image to production
         run: |
-          ls -la
           yarn
           yarn build
+          ls -la dist
       - name: Docker Login
         uses: docker/login-action@v3.0.0
         with:
