@@ -10,9 +10,9 @@
     "skipLibCheck": true
   },
   "include": [
-    "src",
+    "src"
+  ],
+  "exclude": [
     "tests"
-  ], "exclude": [
-    "dist"
   ]
 }
