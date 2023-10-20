@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "test:unit": "jest tests/unit",
-    "build": "tsc -p ."
+    "build": "tsc --project tsconfig.json"
   },
   "devDependencies": {
     "@types/bluebird": "^3.5.40",

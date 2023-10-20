@@ -1,9 +1,9 @@
 FROM node:latest
 WORKDIR /usr/app
-COPY package.json .
-COPY yarn.lock .
-RUN yarn install --production --frozen-lockfile
-COPY src .
+COPY . .
+RUN yarn
 RUN yarn tsc --project tsconfig.json
-RUN rm -rf src
+RUN rm -rf src tests tsconfig.json yarn* 
 CMD ["node", "./dist/src/main.js"]
+
+

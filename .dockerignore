@@ -1,2 +1,14 @@
-.env
+.env*
 node_modules
+secrets
+k8s
+create.sql
+dist
+jest*
+README*
+yarn-error*
+docker-compose.yml
+docs
+.github
+.gitignore
+Dockerfile
