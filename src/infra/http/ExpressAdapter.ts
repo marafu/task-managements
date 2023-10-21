@@ -8,7 +8,7 @@ import BodyParserErrorHandler from "express-body-parser-error-handler";
 import swaggerUi from "swagger-ui-express";
 import YAML from "yamljs";
 
-const swaggerDocument = YAML.load(path.resolve("./src/swagger.yaml"));
+const swaggerDocument = YAML.load(path.resolve("./swagger.yaml"));
 interface CallbackResponse {
   code: number;
   response: any;

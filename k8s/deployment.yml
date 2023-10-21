@@ -87,7 +87,7 @@ spec:
     spec:
       containers:
         - name: web
-          image: hefis/task-managements:test.1.6
+          image: hefis/task-managements:test.1.11
           ports:
             - containerPort: 4000
           env:
