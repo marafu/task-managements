@@ -48,10 +48,10 @@ export class PBKDF2Password implements Password {
   }
 
   validate(password: string): boolean {
-    this.policyValidatePassword(password);
     const value = crypto
       .pbkdf2Sync(password, this.salt, 100, 64, "sha512")
       .toString("hex");
+    console.log(this.value);
     return this.value === value;
   }
 

@@ -19,9 +19,7 @@ export class SignupController {
           const response = await this.signup.execute(body);
           return {
             code: 200,
-            response: {
-              id: response.message,
-            },
+            response,
           };
         } catch (error: any) {
           if (error instanceof AccountExistError)

@@ -14,6 +14,7 @@ import { CancelTask } from "./application/usecases/CancelTask";
 import { SignupController } from "./infra/controller/SignupController";
 import { CreateTaskController } from "./infra/controller/CreateTaskController";
 import { GetTaskController } from "./infra/controller/GetTaskController";
+import { LoginController } from "./infra/controller/LoginController";
 
 const config = {
   host: process.env.DATABASE_HOST || "",
@@ -48,9 +49,14 @@ const getTaskController = new GetTaskController(
   getTask,
   httpServer
 );
+const loginController = new LoginController(
+  accountRepository,
+  login,
+  httpServer
+);
 new MainController(
   signupController,
-  login,
+  loginController,
   createTaskController,
   getTaskController,
   startTask,

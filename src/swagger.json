@@ -28,6 +28,43 @@
               "id": "af12e08d-56e3-4ab5-8b2b-21757fa8c920"
             }
           }
+        },
+        "responses": {
+          "400": {
+            "message": "Invalid name"
+          },
+          "200": {
+            "description": "OK",
+            "message": "Signup successfully"
+          }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "summary": "Login do usuário",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Login"
+              }
+            }
+          },
+          "examples": {
+            "signup": {
+              "message": "string"
+            }
+          }
+        },
+        "responses": {
+          "400": {
+            "message": "Invalid name"
+          },
+          "200": {
+            "description": "OK",
+            "token": "token"
+          }
         }
       }
     }
@@ -40,6 +77,17 @@
           "name": {
             "type": "string"
           },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "Login": {
+        "type": "object",
+        "properties": {
           "email": {
             "type": "string"
           },

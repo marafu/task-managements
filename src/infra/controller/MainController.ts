@@ -12,11 +12,12 @@ import { SignupController } from "./SignupController";
 import { GetTaskController } from "./GetTaskController";
 import { CreateTaskController } from "./CreateTaskController";
 import { AccountNotExistError } from "../../application/errors/AccountNotExistError";
+import { LoginController } from "./LoginController";
 
 export class MainController {
   constructor(
     readonly signupController: SignupController,
-    readonly login: Login,
+    readonly loginController: LoginController,
     readonly createTaskController: CreateTaskController,
     readonly getTaskController: GetTaskController,
     readonly startTask: StartTask,
@@ -27,6 +28,7 @@ export class MainController {
     signupController.execute();
     getTaskController.execute();
     createTaskController.execute();
+    loginController.execute();
 
     this.httpServer.on(
       "get",
@@ -36,30 +38,6 @@ export class MainController {
           code: 200,
           response: "Server on",
         };
-      }
-    );
-
-    this.httpServer.on(
-      "post",
-      "/login",
-      async (params: any, headers: any, body: any) => {
-        try {
-          const response = await this.login.execute(body);
-          return {
-            code: 200,
-            response,
-          };
-        } catch (error: any) {
-          console.log("Aqui");
-          if (error instanceof AccountNotExistError) {
-            return {
-              code: 403,
-              response: {
-                message: error.message,
-              },
-            };
-          }
-        }
       }
     );
 

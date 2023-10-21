@@ -40,7 +40,7 @@ export class Account {
   }
 
   validatePassword(password: string) {
-    return this.password.validate;
+    return this.password.validate(password);
   }
 
   getExternalId(): string {
