@@ -1,4 +1,4 @@
-import { AuthorizationError } from "../errors/AuthorizationError";
+import { AuthorizationError } from "../../application/errors/AuthorizationError";
 import jwt from "jsonwebtoken";
 import { TokenPayload } from "../jwt/TokenPayload";
 import { TaskRepository } from "../../application/repositories/TaskRepository";
@@ -33,7 +33,8 @@ export class GetTaskController {
             code: 200,
             response,
           };
-        } catch (error) {
+        } catch (error: any) {
+          console.trace(error);
           if (error instanceof jwt.JsonWebTokenError) {
             return {
               code: 401,
@@ -48,7 +49,7 @@ export class GetTaskController {
           }
           if (error instanceof AuthorizationError) {
             return {
-              code: 401,
+              code: 403,
               response: { message: error.message },
             };
           }

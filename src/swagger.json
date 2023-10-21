@@ -53,17 +53,45 @@
           },
           "examples": {
             "signup": {
-              "message": "string"
+              "token": "string"
             }
           }
         },
         "responses": {
           "400": {
-            "message": "Invalid name"
+            "message": "Authentication failed"
           },
           "200": {
             "description": "OK",
-            "token": "token"
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjIwMjM2ZDAzMDI5OTVhZmU0OTBjOWRmZDY2OTNmMjIyMGZmMyIsImlhdCI6MTY5Nzg0NjkwOS44MTYsImV4cGlyZXNJbiI6MzYwMH0.IoMRsHtZVBu_3ouTyLCi0iz2ubgQCCgm2aKW7_59l-0"
+          }
+        }
+      }
+    },
+    "/tasks": {
+      "get": {
+        "summary": "Listar tasks do usuário",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetTasks"
+              }
+            }
+          },
+          "examples": {
+            "signup": {
+              "token": "string"
+            }
+          }
+        },
+        "responses": {
+          "400": {
+            "message": "Authentication failed"
+          },
+          "200": {
+            "description": "OK",
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjIwMjM2ZDAzMDI5OTVhZmU0OTBjOWRmZDY2OTNmMjIyMGZmMyIsImlhdCI6MTY5Nzg0NjkwOS44MTYsImV4cGlyZXNJbiI6MzYwMH0.IoMRsHtZVBu_3ouTyLCi0iz2ubgQCCgm2aKW7_59l-0"
           }
         }
       }
@@ -86,6 +114,17 @@
         }
       },
       "Login": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "GetTask": {
         "type": "object",
         "properties": {
           "email": {
