@@ -23,7 +23,7 @@ export class CreateTaskController {
           if (!headers.authorization)
             throw new AuthenticationError({ message: "Token is not provided" });
           const [schema, token] = headers.authorization.split(" ");
-          if (schema != "Token")
+          if (schema != "Bearer")
             throw new AuthenticationError({ message: "Token is not provided" });
           const jwtToken = jwt.decode(token) as TokenPayload;
           const input = {

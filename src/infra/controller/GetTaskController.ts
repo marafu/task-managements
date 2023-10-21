@@ -23,7 +23,7 @@ export class GetTaskController {
               message: "Session token not provide",
             });
           const [schema, token] = headers.authorization.split(" ");
-          if (schema != "Token") throw new Error();
+          if (schema != "Bearer") throw new Error();
           const jwtToken = jwt.verify(
             token,
             process.env.JWT_SECRET || "",

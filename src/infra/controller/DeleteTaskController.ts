@@ -4,18 +4,18 @@ import { UpdateTaskInput } from "../../application/dtos/UpdateTaskInput";
 import { ChangeStatusError } from "../../application/errors/ChangeStatusError";
 import { AuthorizationError } from "../../application/errors/AuthorizationError";
 import { AuthenticationError } from "../../application/errors/AuthenticationError";
-import { CancelTask } from "../../application/usecases/CancelTask";
+import { DeleteTask } from "../../application/usecases/DeleteTask";
 import { HttpServer } from "../http/HttpServer";
 
-export class CancelTaskController {
+export class DeleteTaskController {
   constructor(
-    readonly cancelTask: CancelTask,
+    readonly deleteTask: DeleteTask,
     readonly httpServer: HttpServer
   ) {}
   execute() {
     this.httpServer.on(
-      "post",
-      "/task/cancel",
+      "delete",
+      "/task",
       async (params: any, headers: any, body: any) => {
         try {
           if (!headers.authorization)
@@ -25,7 +25,7 @@ export class CancelTaskController {
             throw new AuthenticationError({ message: "Token is not provided" });
           const jwtToken = jwt.decode(token) as TokenPayload;
           const input = new UpdateTaskInput(jwtToken.id, body.taskId);
-          const response = await this.cancelTask.execute(input);
+          const response = await this.deleteTask.execute(input);
           return {
             code: 200,
             response,
@@ -56,7 +56,6 @@ export class CancelTaskController {
             };
           }
           if (error instanceof ChangeStatusError) {
-            console.log(error.message);
             return {
               code: 400,
               response: {

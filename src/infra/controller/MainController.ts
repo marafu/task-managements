@@ -13,11 +13,10 @@ import { GetTaskController } from "./GetTaskController";
 import { CreateTaskController } from "./CreateTaskController";
 import { AccountNotExistError } from "../../application/errors/AccountNotExistError";
 import { LoginController } from "./LoginController";
-import { AuthenticationError } from "../../application/errors/AuthenticationError";
 import { StartTaskController } from "./StartTaskController";
-import { AuthorizationError } from "../../application/errors/AuthorizationError";
 import { CompleteTaskController } from "./CompleteTaskController";
 import { CancelTaskController } from "./CancelTaskController";
+import { DeleteTaskController } from "./DeleteTaskController";
 
 export class MainController {
   constructor(
@@ -28,6 +27,7 @@ export class MainController {
     readonly startTaskController: StartTaskController,
     readonly completeTaskController: CompleteTaskController,
     readonly cancelTaskController: CancelTaskController,
+    readonly deleteTaskController: DeleteTaskController,
     readonly httpServer: HttpServer
   ) {
     signupController.execute();
@@ -37,5 +37,6 @@ export class MainController {
     startTaskController.execute();
     completeTaskController.execute();
     cancelTaskController.execute();
+    deleteTaskController.execute();
   }
 }

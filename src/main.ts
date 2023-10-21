@@ -18,6 +18,8 @@ import { LoginController } from "./infra/controller/LoginController";
 import { StartTaskController } from "./infra/controller/StartTaskController";
 import { CompleteTaskController } from "./infra/controller/CompleteTaskController";
 import { CancelTaskController } from "./infra/controller/CancelTaskController";
+import { DeleteTaskController } from "./infra/controller/DeleteTaskController";
+import { DeleteTask } from "./application/usecases/DeleteTask";
 
 const config = {
   host: process.env.DATABASE_HOST || "",
@@ -37,6 +39,7 @@ const startTask = new StartTask(accountRepository, taskRepository);
 const completeTask = new CompleteTask(accountRepository, taskRepository);
 const cancelTask = new CancelTask(accountRepository, taskRepository);
 const createTask = new CreateTask(accountRepository, taskRepository);
+const deleteTask = new DeleteTask(accountRepository, taskRepository);
 const signupController = new SignupController(
   accountRepository,
   signup,
@@ -65,6 +68,7 @@ const completeTaskController = new CompleteTaskController(
 );
 
 const cancelTaskController = new CancelTaskController(cancelTask, httpServer);
+const deleteTaskController = new DeleteTaskController(deleteTask, httpServer);
 new MainController(
   signupController,
   loginController,
@@ -73,6 +77,7 @@ new MainController(
   startTaskController,
   completeTaskController,
   cancelTaskController,
+  deleteTaskController,
   httpServer
 );
 httpServer.listen(Number(process.env.PORT) || 3000);
