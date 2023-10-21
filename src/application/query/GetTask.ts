@@ -1,6 +1,5 @@
 import { DatabaseConnection } from "../../infra/database/DatabaseConnection";
 import { GetTaskOutput } from "../dtos/GetTaskOutput";
-import { AuthenticationError } from "../errors/AuthenticationError";
 import { AuthorizationError } from "../errors/AuthorizationError";
 
 export class GetTask {

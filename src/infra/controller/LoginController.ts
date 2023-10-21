@@ -24,7 +24,6 @@ export class LoginController {
             response,
           };
         } catch (error: any) {
-          console.trace(error);
           if (error instanceof ApplicationError) {
             return {
               code: 401,

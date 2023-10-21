@@ -1,23 +1,19 @@
-import { ApplicationError } from "../../application/errors/ApplicationError";
 import jwt from "jsonwebtoken";
-import { TokenPayload } from "../jwt/TokenPayload";
-import { TaskRepository } from "../../application/repositories/TaskRepository";
-import { CreateTask } from "../../application/usecases/CreateTask";
-import { HttpServer } from "../http/HttpServer";
 import { AuthenticationError } from "../../application/errors/AuthenticationError";
+import { TokenPayload } from "../jwt/TokenPayload";
+import { UpdateTaskInput } from "../../application/dtos/UpdateTaskInput";
+import { StartTask } from "../../application/usecases/StartTask";
+import { HttpServer } from "../http/HttpServer";
 import { AuthorizationError } from "../../application/errors/AuthorizationError";
 import { ChangeStatusError } from "../../application/errors/ChangeStatusError";
-export class CreateTaskController {
-  constructor(
-    readonly taskController: TaskRepository,
-    readonly createTask: CreateTask,
-    readonly httpServer: HttpServer
-  ) {}
 
-  execute(): void {
+export class StartTaskController {
+  constructor(readonly startTask: StartTask, readonly httpServer: HttpServer) {}
+
+  execute() {
     this.httpServer.on(
       "post",
-      "/task",
+      "/task/start",
       async (params: any, headers: any, body: any) => {
         try {
           if (!headers.authorization)
@@ -26,17 +22,13 @@ export class CreateTaskController {
           if (schema != "Token")
             throw new AuthenticationError({ message: "Token is not provided" });
           const jwtToken = jwt.decode(token) as TokenPayload;
-          const input = {
-            token: jwtToken.id,
-            title: body.title,
-            description: body.description,
-          };
-          const response = await this.createTask.execute(input);
+          const input = new UpdateTaskInput(jwtToken.id, body.taskId);
+          const response = await this.startTask.execute(input);
           return {
             code: 201,
             response,
           };
-        } catch (error) {
+        } catch (error: any) {
           if (error instanceof jwt.JsonWebTokenError) {
             return {
               code: 401,

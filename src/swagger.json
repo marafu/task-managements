@@ -14,7 +14,8 @@
   "paths": {
     "/signup": {
       "post": {
-        "summary": "Registro do usuário",
+        "summary": "Registrar usuário",
+        "tags": ["Usuário"],
         "requestBody": {
           "content": {
             "application/json": {
@@ -43,6 +44,7 @@
     "/login": {
       "post": {
         "summary": "Login do usuário",
+        "tags": ["Usuário"],
         "requestBody": {
           "content": {
             "application/json": {
@@ -71,23 +73,69 @@
     "/tasks": {
       "get": {
         "summary": "Listar tasks do usuário",
+        "tags": ["Task"],
+        "requestBody": {},
+        "responses": {
+          "403": {
+            "message": "Session token not provided"
+          },
+          "401": {
+            "message": "Authentication failed"
+          },
+          "200": {
+            "description": "OK",
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjIwMjM2ZDAzMDI5OTVhZmU0OTBjOWRmZDY2OTNmMjIyMGZmMyIsImlhdCI6MTY5Nzg0NjkwOS44MTYsImV4cGlyZXNJbiI6MzYwMH0.IoMRsHtZVBu_3ouTyLCi0iz2ubgQCCgm2aKW7_59l-0"
+          }
+        }
+      },
+      "post": {
+        "summary": "Criar tasks do usuário",
+        "tags": ["Task"],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/GetTasks"
+                "$ref": "#/components/schemas/CreateTask"
               }
-            }
-          },
-          "examples": {
-            "signup": {
-              "token": "string"
             }
           }
         },
         "responses": {
-          "400": {
+          "403": {
+            "message": "Session token not provided"
+          },
+          "401": {
             "message": "Authentication failed"
+          },
+          "200": {
+            "description": "OK",
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjIwMjM2ZDAzMDI5OTVhZmU0OTBjOWRmZDY2OTNmMjIyMGZmMyIsImlhdCI6MTY5Nzg0NjkwOS44MTYsImV4cGlyZXNJbiI6MzYwMH0.IoMRsHtZVBu_3ouTyLCi0iz2ubgQCCgm2aKW7_59l-0"
+          }
+        }
+      }
+    },
+    "task/start": {
+      "post": {
+        "summary": "Iniciar uma task",
+        "tags": ["Task"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangeStatusTask"
+              }
+            }
+          }
+        },
+        "responses": {
+          "403": {
+            "message": "Session token not provided"
+          },
+          "401": {
+            "message": "Authentication failed"
+          },
+          "400": {
+            "message": "Could not change tasks with status Done, Canceled or In Progress"
           },
           "200": {
             "description": "OK",
@@ -131,6 +179,17 @@
             "type": "string"
           },
           "password": {
+            "type": "string"
+          }
+        }
+      },
+      "CreateTask": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "description": {
             "type": "string"
           }
         }
