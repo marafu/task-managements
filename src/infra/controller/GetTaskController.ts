@@ -24,17 +24,18 @@ export class GetTaskController {
             });
           const [schema, token] = headers.authorization.split(" ");
           if (schema != "Bearer") throw new Error();
-          const jwtToken = jwt.verify(
-            token,
-            process.env.JWT_SECRET || "",
-            {}
-          ) as TokenPayload;
+          const jwtToken = jwt.verify(token, process.env.JWT_SECRET || "") as {
+            id: string;
+            iat: any;
+            expiredIn: any;
+          };
           const response = await this.getTask.execute(jwtToken.id);
           return {
             code: 200,
             response,
           };
         } catch (error: any) {
+          console.trace(error);
           if (error instanceof jwt.JsonWebTokenError) {
             return {
               code: 401,
@@ -59,6 +60,12 @@ export class GetTaskController {
               response: { message: error.message },
             };
           }
+          return {
+            code: 500,
+            response: {
+              message: "Internal Server Error",
+            },
+          };
         }
       }
     );

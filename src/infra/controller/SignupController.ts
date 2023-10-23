@@ -22,6 +22,7 @@ export class SignupController {
             response,
           };
         } catch (error: any) {
+          console.trace(error);
           if (error instanceof AccountExistError)
             return {
               code: 400,
@@ -34,6 +35,12 @@ export class SignupController {
               response: { message: error.message },
             };
           }
+          return {
+            code: 500,
+            response: {
+              message: "Internal Server Error",
+            },
+          };
         }
       }
     );

@@ -13,9 +13,8 @@ services:
       - my-db:/var/lib/mysql
   # app:
   #   container_name: app
-  #   build: .
+  #   image: hefis/task-managements:test.1.13
   #   env_file: .env
-  #   restart: always
   #   ports:
   #     - 4000:4000
   #   depends_on:

@@ -30,8 +30,8 @@ export class CreateTask {
     await this.taskRepository.save(task);
     return new CreateTaskOutput(
       task.getExternalId(),
-      task.title,
-      task.description,
+      task.title.value,
+      task.description.value,
       task.getStatus()
     );
   }

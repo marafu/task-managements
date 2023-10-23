@@ -51,11 +51,8 @@ export class PBKDF2Password implements Password {
     const value = crypto
       .pbkdf2Sync(password, this.salt, 100, 64, "sha512")
       .toString("hex");
-    console.log(this.value);
     return this.value === value;
   }
-
-  policyValidatePassword(password: string) {}
 }
 
 export class PasswordFactory {

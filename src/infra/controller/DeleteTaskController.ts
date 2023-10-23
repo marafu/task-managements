@@ -23,7 +23,11 @@ export class DeleteTaskController {
           const [schema, token] = headers.authorization.split(" ");
           if (schema != "Bearer")
             throw new AuthenticationError({ message: "Token is not provided" });
-          const jwtToken = jwt.decode(token) as TokenPayload;
+          const jwtToken = jwt.verify(token, process.env.JWT_SECRET || "") as {
+            id: string;
+            iat: any;
+            expiredIn: any;
+          };
           const input = new UpdateTaskInput(jwtToken.id, body.taskId);
           const response = await this.deleteTask.execute(input);
           return {
@@ -31,6 +35,7 @@ export class DeleteTaskController {
             response,
           };
         } catch (error: any) {
+          console.trace(error);
           if (error instanceof jwt.JsonWebTokenError) {
             return {
               code: 401,
@@ -63,6 +68,12 @@ export class DeleteTaskController {
               },
             };
           }
+          return {
+            code: 500,
+            response: {
+              message: "Internal Server Error",
+            },
+          };
         }
       }
     );

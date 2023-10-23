@@ -1,6 +1,5 @@
 import express, { Request, Response, Router } from "express";
 import cors from "cors";
-import fs from "fs";
 import path from "path";
 import helmet from "helmet";
 import { HttpServer } from "./HttpServer";

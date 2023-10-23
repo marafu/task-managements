@@ -31,11 +31,7 @@ export class StartTask {
       throw new ChangeStatusError({
         message: "You don't have permission to delete this task",
       });
-    if (
-      task.getStatus() === "Cancelled" ||
-      task.getStatus() === "In Progress" ||
-      task.getStatus() === "Done"
-    )
+    if (task.getStatus() === "Cancelled" || task.getStatus() === "Done")
       throw new ChangeStatusError({
         message:
           "Could not change tasks with status Done, Canceled or In Progress",

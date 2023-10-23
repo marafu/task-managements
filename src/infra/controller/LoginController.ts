@@ -24,6 +24,7 @@ export class LoginController {
             response,
           };
         } catch (error: any) {
+          console.trace(error);
           if (error instanceof ApplicationError) {
             return {
               code: 401,
@@ -32,6 +33,12 @@ export class LoginController {
               },
             };
           }
+          return {
+            code: 500,
+            response: {
+              message: "Internal Server Error",
+            },
+          };
         }
       }
     );
