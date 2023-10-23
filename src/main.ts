@@ -60,13 +60,11 @@ const loginController = new LoginController(
   login,
   httpServer
 );
-
 const startTaskController = new StartTaskController(startTask, httpServer);
 const completeTaskController = new CompleteTaskController(
   completeTask,
   httpServer
 );
-
 const cancelTaskController = new CancelTaskController(cancelTask, httpServer);
 const deleteTaskController = new DeleteTaskController(deleteTask, httpServer);
 new MainController(
