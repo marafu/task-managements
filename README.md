@@ -14,9 +14,6 @@
 
 Foi utilizado o NodeJS para criar o sistema pois é uma tecnologia, amplamente utilizada além de permitir o desenvolvimento com maior liberdado comparado a outras stacks.
 
-![](https://img.shields.io/static/v1?label=License&message=MIT&color=blue&style=flat)
-![Docker Image Version (tag latest semver)](https://img.shields.io/docker/v/hefis/task-managements/latest)
-
 ## Decisões da Modelagem de ameaças
 
 Não foquei necessáriamente em nenhuma metodologia utilizada utilizada pelo mercado (STRIDE, DREAD, PASTA, etc...),
@@ -25,3 +22,16 @@ eu fiz uma modelagem de ameaças de forma manual e não foquei em diagramas de f
 ## Decisões de Design
 
 Utilizei DDD, SOLID e Clean Arch para facilitar a segregação de camadas e consequentemente de validações e controles de vulnerabilidades sem perde a manutenabilidade do sistema. Permitindo o aumento do projeto sem perder a qualidade do código e facilitando a refatoração no futuro.
+
+---
+
+Docker image:
+
+```sh
+$ docker push hefis/task-managements:latest
+```
+
+---
+
+![](https://img.shields.io/static/v1?label=License&message=MIT&color=blue&style=flat)
+![Docker Image Version (tag latest semver)](https://img.shields.io/docker/v/hefis/task-managements/latest)
