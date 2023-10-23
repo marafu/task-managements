@@ -27,13 +27,25 @@ jobs:
         run: |
           yarn test:unit
 
+  SECURITY:
+    needs: [BUILD]
+    runs-on: ubuntu-latest
+    container:
+      image: convisoappsec/convisocli
+      env:
+        FLOW_API_KEY: ${{secrets.CONVISO_API_KEY}}
+        FLOW_PROJECT_CODE: ${{github.repository}}
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Run SCA
+        run: conviso sca run
   CI:
     runs-on: ubuntu-latest
-    needs: [BUILD]
+    needs: [SECURITY]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-
       - name: Docker Login
         uses: docker/login-action@v3.0.0
         with:
@@ -49,7 +61,6 @@ jobs:
           tags: |
             hefis/task-managements:1.${{github.run_id}}
             hefis/task-managements:latest
-
   CD:
     runs-on: ubuntu-latest
     needs: [CI]

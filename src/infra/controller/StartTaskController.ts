@@ -1,37 +1,34 @@
-import { AuthorizationError } from "../../application/errors/AuthorizationError";
 import jwt from "jsonwebtoken";
-import { TokenPayload } from "../jwt/TokenPayload";
-import { TaskRepository } from "../../application/repositories/TaskRepository";
-import { GetTask } from "../../application/query/GetTask";
-import { HttpServer } from "../http/HttpServer";
 import { AuthenticationError } from "../../application/errors/AuthenticationError";
+import { TokenPayload } from "../jwt/TokenPayload";
+import { UpdateTaskInput } from "../../application/dtos/UpdateTaskInput";
+import { StartTask } from "../../application/usecases/StartTask";
+import { HttpServer } from "../http/HttpServer";
+import { AuthorizationError } from "../../application/errors/AuthorizationError";
+import { ChangeStatusError } from "../../application/errors/ChangeStatusError";
 
-export class GetTaskController {
-  constructor(
-    readonly taskRepository: TaskRepository,
-    readonly getTask: GetTask,
-    readonly httpServer: HttpServer
-  ) {}
-  execute(): void {
+export class StartTaskController {
+  constructor(readonly startTask: StartTask, readonly httpServer: HttpServer) {}
+
+  execute() {
     this.httpServer.on(
-      "get",
-      "/task",
+      "post",
+      "/task/start",
       async (params: any, headers: any, body: any) => {
         try {
           if (!headers.authorization)
-            throw new AuthenticationError({
-              message: "Session token not provide",
-            });
+            throw new AuthenticationError({ message: "Token is not provided" });
           const [schema, token] = headers.authorization.split(" ");
-          if (schema != "Bearer") throw new Error();
-          const jwtToken = jwt.verify(token, process.env.JWT_SECRET || "") as {
-            id: string;
-            iat: any;
-            expiredIn: any;
-          };
-          const response = await this.getTask.execute(jwtToken.id);
+          if (schema != "Bearer")
+            throw new AuthenticationError({ message: "Token is not provided" });
+          const jwtToken = jwt.verify(
+            token,
+            process.env.JWT_SECRET || ""
+          ) as unknown as TokenPayload;
+          const input = new UpdateTaskInput(jwtToken.id, body.taskId);
+          const response = await this.startTask.execute(input);
           return {
-            code: 200,
+            code: 201,
             response,
           };
         } catch (error: any) {
@@ -58,6 +55,14 @@ export class GetTaskController {
             return {
               code: 403,
               response: { message: error.message },
+            };
+          }
+          if (error instanceof ChangeStatusError) {
+            return {
+              code: 400,
+              response: {
+                message: error.message,
+              },
             };
           }
           return {

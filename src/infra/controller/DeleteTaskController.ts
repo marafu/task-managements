@@ -1,35 +1,35 @@
-import { AuthorizationError } from "../../application/errors/AuthorizationError";
 import jwt from "jsonwebtoken";
 import { TokenPayload } from "../jwt/TokenPayload";
-import { TaskRepository } from "../../application/repositories/TaskRepository";
-import { GetTask } from "../../application/query/GetTask";
-import { HttpServer } from "../http/HttpServer";
+import { UpdateTaskInput } from "../../application/dtos/UpdateTaskInput";
+import { ChangeStatusError } from "../../application/errors/ChangeStatusError";
+import { AuthorizationError } from "../../application/errors/AuthorizationError";
 import { AuthenticationError } from "../../application/errors/AuthenticationError";
+import { DeleteTask } from "../../application/usecases/DeleteTask";
+import { HttpServer } from "../http/HttpServer";
 
-export class GetTaskController {
+export class DeleteTaskController {
   constructor(
-    readonly taskRepository: TaskRepository,
-    readonly getTask: GetTask,
+    readonly deleteTask: DeleteTask,
     readonly httpServer: HttpServer
   ) {}
-  execute(): void {
+  execute() {
     this.httpServer.on(
-      "get",
+      "delete",
       "/task",
       async (params: any, headers: any, body: any) => {
         try {
           if (!headers.authorization)
-            throw new AuthenticationError({
-              message: "Session token not provide",
-            });
+            throw new AuthenticationError({ message: "Token is not provided" });
           const [schema, token] = headers.authorization.split(" ");
-          if (schema != "Bearer") throw new Error();
+          if (schema != "Bearer")
+            throw new AuthenticationError({ message: "Token is not provided" });
           const jwtToken = jwt.verify(token, process.env.JWT_SECRET || "") as {
             id: string;
             iat: any;
             expiredIn: any;
           };
-          const response = await this.getTask.execute(jwtToken.id);
+          const input = new UpdateTaskInput(jwtToken.id, body.taskId);
+          const response = await this.deleteTask.execute(input);
           return {
             code: 200,
             response,
@@ -58,6 +58,14 @@ export class GetTaskController {
             return {
               code: 403,
               response: { message: error.message },
+            };
+          }
+          if (error instanceof ChangeStatusError) {
+            return {
+              code: 400,
+              response: {
+                message: error.message,
+              },
             };
           }
           return {

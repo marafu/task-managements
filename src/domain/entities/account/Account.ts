@@ -38,9 +38,11 @@ export class Account {
   getPasswordSalt(): string {
     return this.password.salt;
   }
+
   validatePassword(password: string) {
-    return this.password.validate;
+    return this.password.validate(password);
   }
+
   getExternalId(): string {
     return this.externalId;
   }

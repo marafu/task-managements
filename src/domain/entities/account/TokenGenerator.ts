@@ -7,8 +7,9 @@ export default class TokenGenerator {
     const token = sign(
       {
         id: account.getExternalId(),
-        iat: date.getTime() / 1000,
-        expiresIn: 3600,
+        exp: Math.floor(date.getTime() / 1000) + 60 * 60,
+        iat: Math.floor(date.getTime() / 1000),
+        expiresIn: "3600",
       },
       process.env.JWT_SECRET || ""
     );

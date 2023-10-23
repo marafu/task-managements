@@ -12,143 +12,31 @@ import { SignupController } from "./SignupController";
 import { GetTaskController } from "./GetTaskController";
 import { CreateTaskController } from "./CreateTaskController";
 import { AccountNotExistError } from "../../application/errors/AccountNotExistError";
+import { LoginController } from "./LoginController";
+import { StartTaskController } from "./StartTaskController";
+import { CompleteTaskController } from "./CompleteTaskController";
+import { CancelTaskController } from "./CancelTaskController";
+import { DeleteTaskController } from "./DeleteTaskController";
 
 export class MainController {
   constructor(
     readonly signupController: SignupController,
-    readonly login: Login,
+    readonly loginController: LoginController,
     readonly createTaskController: CreateTaskController,
     readonly getTaskController: GetTaskController,
-    readonly startTask: StartTask,
-    readonly completeTask: CompleteTask,
-    readonly cancelTask: CancelTask,
+    readonly startTaskController: StartTaskController,
+    readonly completeTaskController: CompleteTaskController,
+    readonly cancelTaskController: CancelTaskController,
+    readonly deleteTaskController: DeleteTaskController,
     readonly httpServer: HttpServer
   ) {
     signupController.execute();
+    loginController.execute();
     getTaskController.execute();
     createTaskController.execute();
-
-    this.httpServer.on(
-      "get",
-      "/hello",
-      async (params: any, headers: any, body: any) => {
-        return {
-          code: 200,
-          response: "Server on",
-        };
-      }
-    );
-
-    this.httpServer.on(
-      "post",
-      "/login",
-      async (params: any, headers: any, body: any) => {
-        try {
-          const response = await this.login.execute(body);
-          return {
-            code: 200,
-            response,
-          };
-        } catch (error: any) {
-          console.log("Aqui");
-          if (error instanceof AccountNotExistError) {
-            return {
-              code: 403,
-              response: {
-                message: error.message,
-              },
-            };
-          }
-        }
-      }
-    );
-
-    this.httpServer.on(
-      "post",
-      "/task/start",
-      async (params: any, headers: any, body: any) => {
-        try {
-          const [schema, token] = headers.authorization.split(" ");
-          if (schema != "Token") throw new Error();
-          const jwtToken = jwt.decode(token) as TokenPayload;
-          const input = new UpdateTaskInput(jwtToken.id, body.taskId);
-          const response = await this.startTask.execute(input);
-          return {
-            code: 201,
-            response,
-          };
-        } catch (error: any) {
-          if (error instanceof ChangeStatusError) {
-            if (error instanceof ChangeStatusError) {
-              console.log(error.message);
-              return {
-                code: 400,
-                response: {
-                  message: error.message,
-                },
-              };
-            }
-          }
-        }
-      }
-    );
-
-    this.httpServer.on(
-      "post",
-      "/task/close",
-      async (params: any, headers: any, body: any) => {
-        try {
-          const [schema, token] = headers.authorization.split(" ");
-          if (schema != "Token") throw new Error();
-          const jwtToken = jwt.decode(token) as TokenPayload;
-          const input = new UpdateTaskInput(jwtToken.id, body.taskId);
-          const response = await this.completeTask.execute(input);
-          return {
-            code: 201,
-            response,
-          };
-        } catch (error: any) {
-          if (error instanceof ChangeStatusError) {
-            if (error instanceof ChangeStatusError) {
-              console.log(error.message);
-              return {
-                code: 400,
-                response: {
-                  message: error.message,
-                },
-              };
-            }
-          }
-        }
-      }
-    );
-
-    this.httpServer.on(
-      "post",
-      "/task/cancel",
-      async (params: any, headers: any, body: any) => {
-        try {
-          const [schema, token] = headers.authorization.split(" ");
-          if (schema != "Token") throw new Error();
-          const jwtToken = jwt.decode(token) as TokenPayload;
-          const input = new UpdateTaskInput(jwtToken.id, body.taskId);
-          const response = await this.cancelTask.execute(input);
-          return {
-            code: 200,
-            response,
-          };
-        } catch (error: any) {
-          if (error instanceof ChangeStatusError) {
-            console.log(error.message);
-            return {
-              code: 400,
-              response: {
-                message: error.message,
-              },
-            };
-          }
-        }
-      }
-    );
+    startTaskController.execute();
+    completeTaskController.execute();
+    cancelTaskController.execute();
+    deleteTaskController.execute();
   }
 }

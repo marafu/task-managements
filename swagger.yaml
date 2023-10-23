@@ -1,0 +1,205 @@
+openapi: 3.0.0
+info:
+  title: API de gerenciamento de tarefas
+  description: Documentação da API de gerenciamento de tarefas
+  version: 1.0.0
+
+servers:
+  - url: "localhost:4000"
+    description: "local"
+
+paths:
+  /signup:
+    post:
+      operationId: "1"
+      description: "Registrar usuário"
+      summary: Registrar usuário
+      tags:
+        - Usuário
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Signup"
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: BAD REQUEST
+  /login:
+    post:
+      operationId: "2"
+      summary: Login do usuário
+      description: "Alguma coisa"
+      tags:
+        - Usuário
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Login"
+      responses:
+        "200":
+          description: RETURN JWT TOKEN
+        "400":
+          description: Authentication failed
+  /task:
+    get:
+      operationId: "3"
+      description: "List task"
+      summary: Listar tasks do usuário
+      tags:
+        - Task
+      responses:
+        "200":
+          description: List Array of tasks
+        "401":
+          description: Authentication failed
+        "403":
+          description: Session token not provided]
+      security:
+        - BearerAuth: []
+    post:
+      operationId: "4"
+      description: "Create task"
+      summary: Criar tasks do usuário
+      tags:
+        - Task
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateTask"
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: Authentication failed
+        "403":
+          description: Session token not provided
+      security:
+        - BearerAuth: []
+    delete:
+      operationId: "8"
+      description: "Delete task"
+      summary: Deletar tasks do usuário
+      tags:
+        - Task
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateTask"
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: Authentication failed
+        "403":
+          description: Session token not provided
+      security:
+        - BearerAuth: []
+  /task/start:
+    post:
+      operationId: "5"
+      description: "Start task"
+      summary: Iniciar uma task
+      tags:
+        - Task
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChangeStatusTask"
+      responses:
+        "200":
+          description: string
+        "400":
+          description: Could not change tasks with status Done, Canceled or In Progress
+        "401":
+          description: Authentication failed
+        "403":
+          description: Session token not provided
+      security:
+        - BearerAuth: []
+  /task/close:
+    post:
+      operationId: "6"
+      description: "Close task"
+      summary: Finalizando uma task
+      tags:
+        - Task
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChangeStatusTask"
+      responses:
+        "200":
+          description: Return text message
+        "400":
+          description: Could not change tasks with status Done, Canceled or In Progress
+        "401":
+          description: Authentication failed
+        "403":
+          description: Session token not provided
+      security:
+        - BearerAuth: []
+  /task/cancel:
+    post:
+      operationId: "7"
+      description: "Cancel Task"
+      summary: Cancelando uma task
+      tags:
+        - Task
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChangeStatusTask"
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Could not change tasks with status Done, Canceled or In Progress
+        "401":
+          description: Authentication failed
+        "403":
+          description: Session token not provided
+      security:
+        - BearerAuth: []
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+
+  schemas:
+    Signup:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+    Login:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+    CreateTask:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+    ChangeStatusTask:
+      type: object
+      properties:
+        taskId:
+          type: string

@@ -1,3 +1,3 @@
 export class SignupOutput {
-  constructor(readonly accountId: string) {}
+  constructor(readonly message: string) {}
 }

@@ -1,38 +1,36 @@
-import { AccountExistError } from "../../application/errors/AccountExistError";
+import { AccountNotExistError } from "../../application/errors/AccountNotExistError";
+import { ApplicationError } from "../../application/errors/ApplicationError";
+import { AuthenticationError } from "../../application/errors/AuthenticationError";
 import { AccountRepository } from "../../application/repositories/AccountRepository";
-import { Signup } from "../../application/usecases/Signup";
+import { Login } from "../../application/usecases/Login";
 import { DomainError } from "../../domain/errors/DomainErrors";
 import { HttpServer } from "../http/HttpServer";
 
-export class SignupController {
+export class LoginController {
   constructor(
     readonly accountRepository: AccountRepository,
-    readonly signup: Signup,
+    readonly login: Login,
     readonly httpServer: HttpServer
   ) {}
-  execute(): void {
+  execute() {
     this.httpServer.on(
       "post",
-      "/signup",
+      "/login",
       async (params: any, headers: any, body: any) => {
         try {
-          const response = await this.signup.execute(body);
+          const response = await this.login.execute(body);
           return {
             code: 200,
             response,
           };
         } catch (error: any) {
           console.trace(error);
-          if (error instanceof AccountExistError)
+          if (error instanceof ApplicationError) {
             return {
-              code: 400,
-              response: { message: error.message },
-            };
-
-          if (error instanceof DomainError) {
-            return {
-              code: 400,
-              response: { message: error.message },
+              code: 401,
+              response: {
+                message: error.message,
+              },
             };
           }
           return {

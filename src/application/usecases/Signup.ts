@@ -8,15 +8,13 @@ export class Signup {
   constructor(readonly accountRepository: AccountRepository) {}
 
   async execute(input: SignupInput): Promise<SignupOutput> {
+    const account = Account.create(input.name, input.email, input.password);
     const existingAccount = await this.accountRepository.getByEmail(
       input.email
     );
     if (existingAccount)
       throw new AccountExistError({ message: "Account already exists" });
-    const account = Account.create(input.name, input.email, input.password);
     await this.accountRepository.save(account);
-    return {
-      accountId: account.getId(),
-    };
+    return new SignupOutput("Signup successfully");
   }
 }
